@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> findAll() {
+    public List<BookDto> getAll() {
         return bookRepository.findAll().stream()
                 .map(bookMapper::toDto)
                 .collect(Collectors.toList());
@@ -48,7 +48,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto updateById(Long id, CreateBookRequestDto bookRequestDto) {
+    public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
         Book bookForUpdate = bookMapper.toModel(bookRequestDto);
         bookForUpdate.setId(id);
         return bookMapper.toDto(bookRepository.save(bookForUpdate));

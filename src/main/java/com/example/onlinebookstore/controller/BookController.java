@@ -4,6 +4,7 @@ import com.example.onlinebookstore.dto.BookDto;
 import com.example.onlinebookstore.dto.BookSearchParameters;
 import com.example.onlinebookstore.dto.CreateBookRequestDto;
 import com.example.onlinebookstore.service.BookService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api/books")
+@RequestMapping(value = "/books")
 public class BookController {
     private final BookService bookService;
 
@@ -35,13 +36,13 @@ public class BookController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDto create(@RequestBody CreateBookRequestDto bookDto) {
+    public BookDto create(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
 
     @PutMapping("/{id}")
     public BookDto updateById(@PathVariable Long id,
-                              @RequestBody CreateBookRequestDto bookRequestDto) {
+                              @RequestBody @Valid CreateBookRequestDto bookRequestDto) {
         return bookService.update(id, bookRequestDto);
     }
 

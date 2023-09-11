@@ -5,6 +5,8 @@ import com.example.onlinebookstore.dto.user.UserLoginResponseDto;
 import com.example.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookstore.dto.user.UserResponseDto;
 import com.example.onlinebookstore.exception.RegistrationException;
+import com.example.onlinebookstore.service.AuthenticationService;
+import com.example.onlinebookstore.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
+    private final UserService userService;
+    private final AuthenticationService authenticationService;
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
-        return null;
+        return authenticationService.authenticate(request);
     }
     @PostMapping("/register")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {
-        return null;
+        return userService.register(request);
     }
 }

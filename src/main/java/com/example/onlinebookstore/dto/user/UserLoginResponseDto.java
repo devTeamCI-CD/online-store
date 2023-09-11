@@ -1,4 +1,4 @@
 package com.example.onlinebookstore.dto.user;
 
-public class UserLoginResponseDto {
+public record UserLoginResponseDto(String token) {
 }

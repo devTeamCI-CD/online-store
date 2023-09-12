@@ -17,11 +17,10 @@ databaseChangeLog:
                   value: admin@a.ua
               - column:
                   name: password
-                  value: $2a$12$6V5R/EUdgsBYkUGX7cWf.eEBn0iRY7GLE8QKdsmEZWh9dHJXvxnD2
+                  value: $2a$10$IwQ.C1d7bWTWcFEe/VTR8uqEsEvlgfD6RWmoISmiVc/buQULQv/Hu
               - column:
                   name: is_deleted
                   valueBoolean: false
-
         - insert:
             tableName: user_role
             columns:

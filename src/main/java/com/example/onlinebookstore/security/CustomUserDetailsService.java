@@ -1,7 +1,6 @@
 package com.example.onlinebookstore.security;
 
 import com.example.onlinebookstore.exception.EntityNotFoundException;
-import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(

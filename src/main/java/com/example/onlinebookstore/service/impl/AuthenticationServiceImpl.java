@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
+
     @Override
     public UserLoginResponseDto authenticate(UserLoginRequestDto request) {
         Authentication authentication = authenticationManager.authenticate(

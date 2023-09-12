@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Object> {
     private String field;
     private String fieldToMatch;
+
     @Override
     public void initialize(FieldMatch constraintAnnotation) {
         this.field = constraintAnnotation.field();
@@ -30,7 +31,8 @@ public class FieldMatchValidator implements ConstraintValidator<FieldMatch, Obje
             Object firstObj = firstField.get(value);
             Object secondObj = secondField.get(value);
 
-            return firstObj == null && secondObj == null || firstObj != null && firstObj.equals(secondObj);
+            return firstObj == null && secondObj == null
+                    || firstObj != null && firstObj.equals(secondObj);
         } catch (Exception ignore) {
             throw new RuntimeException(ignore);
         }

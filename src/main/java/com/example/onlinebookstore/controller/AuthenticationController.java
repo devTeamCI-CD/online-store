@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
+
     @PostMapping("/login")
     public UserLoginResponseDto login(@RequestBody @Valid UserLoginRequestDto request) {
         return authenticationService.authenticate(request);
     }
+
     @PostMapping("/register")
     public UserResponseDto register(@RequestBody @Valid UserRegistrationRequestDto request)
             throws RegistrationException {

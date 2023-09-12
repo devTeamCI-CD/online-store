@@ -9,11 +9,10 @@ import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.user.RoleRepository;
 import com.example.onlinebookstore.repository.user.UserRepository;
 import com.example.onlinebookstore.service.UserService;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +21,13 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+
     @Override
-    public UserResponseDto register(UserRegistrationRequestDto request) throws RegistrationException {
+    public UserResponseDto register(UserRegistrationRequestDto request)
+            throws RegistrationException {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RegistrationException("User with email " + request.getEmail() + " already exists");
+            throw new RegistrationException("User with email "
+                    + request.getEmail() + " already exists");
         }
         User user = userMapper.toModel(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));

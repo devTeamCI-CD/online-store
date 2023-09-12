@@ -11,14 +11,14 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.Set;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
-import java.util.Set;
 
 @Entity
 @Data
@@ -36,11 +36,11 @@ public class User implements UserDetails {
     private String password;
     @NotNull
     @Column(name = "first_name")
-    private String  firstName;
+    private String firstName;
     @NotNull
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "shipping_adress")
+    @Column(name = "shipping_address")
     private String shippingAddress;
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),

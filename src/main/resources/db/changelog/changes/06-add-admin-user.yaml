@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_admin_user
+      author: arsen
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: Admin
+              - column:
+                  name: last_name
+                  value: Adminovich
+              - column:
+                  name: email
+                  value: admin@a.ua
+              - column:
+                  name: password
+                  value: $2a$12$6V5R/EUdgsBYkUGX7cWf.eEBn0iRY7GLE8QKdsmEZWh9dHJXvxnD2
+              - column:
+                  name: is_deleted
+                  valueBoolean: false
+
+        - insert:
+            tableName: user_role
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 2

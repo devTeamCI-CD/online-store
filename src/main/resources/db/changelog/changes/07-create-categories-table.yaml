@@ -1,0 +1,6 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_categories_table
+      author: arsen
+      changes:
+        -

@@ -1,8 +1,8 @@
 package com.example.onlinebookstore.service.impl;
 
-import com.example.onlinebookstore.dto.BookDto;
-import com.example.onlinebookstore.dto.BookSearchParameters;
-import com.example.onlinebookstore.dto.CreateBookRequestDto;
+import com.example.onlinebookstore.dto.book.BookDto;
+import com.example.onlinebookstore.dto.book.BookSearchParameters;
+import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
@@ -31,7 +31,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDto> getAll(Pageable pageable) {
-        return bookRepository.findAll(pageable).stream()
+        return bookRepository.findAll(pageable)
+                .stream()
                 .map(bookMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -45,13 +46,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        validateEntityExists(id);
         bookRepository.deleteById(id);
     }
 
     @Override
     public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
-        validateEntityExists(id);
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
         Book bookForUpdate = bookMapper.toModel(bookRequestDto);
         bookForUpdate.setId(id);
         return bookMapper.toDto(bookRepository.save(bookForUpdate));
@@ -63,11 +65,5 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    private void validateEntityExists(Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find book with id: " + id);
-        }
     }
 }

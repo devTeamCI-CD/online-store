@@ -1,8 +1,8 @@
 package com.example.onlinebookstore.controller;
 
-import com.example.onlinebookstore.dto.BookDto;
-import com.example.onlinebookstore.dto.BookSearchParameters;
-import com.example.onlinebookstore.dto.CreateBookRequestDto;
+import com.example.onlinebookstore.dto.book.BookDto;
+import com.example.onlinebookstore.dto.book.BookSearchParameters;
+import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,7 @@ public class BookController {
             description = "Perceive a new book to the database")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto create(@RequestBody @Valid CreateBookRequestDto bookDto) {
         return bookService.save(bookDto);
     }
@@ -53,6 +55,7 @@ public class BookController {
     @Operation(summary = "Update book by ID",
             description = "Modify an existing book using its id")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public BookDto update(@PathVariable Long id,
                               @RequestBody @Valid CreateBookRequestDto bookRequestDto) {
         return bookService.update(id, bookRequestDto);
@@ -62,6 +65,7 @@ public class BookController {
             description = "Soft delete a book from the DB by its id")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(@PathVariable Long id) {
         bookService.deleteById(id);
     }

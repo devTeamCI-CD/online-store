@@ -10,11 +10,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final int NOT_FOUND_STATUS = 404;
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -22,15 +25,26 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpStatusCode status,
             WebRequest request
     ) {
-        ArgumentNotValidResponse notValidResponse = new ArgumentNotValidResponse();
         String[] errors = ex.getBindingResult().getAllErrors()
                 .stream()
                 .map(this::getErrorMessage)
                 .toArray(String[]::new);
+        return createResponseEntityFromExceptionErrors(errors);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    protected ResponseEntity<Object> handleEntityNotFoundException(
+            EntityNotFoundException e
+    ) {
+        return createResponseEntityFromExceptionErrors(new String[]{e.getMessage()});
+    }
+
+    private ResponseEntity<Object> createResponseEntityFromExceptionErrors(String[] errors) {
+        ArgumentNotValidResponse notValidResponse = new ArgumentNotValidResponse();
         notValidResponse.setTimestamp(LocalDateTime.now());
-        notValidResponse.setStatus(HttpStatus.BAD_REQUEST);
+        notValidResponse.setStatus(HttpStatus.NOT_FOUND);
         notValidResponse.setErrors(errors);
-        return new ResponseEntity<>(notValidResponse, headers, status);
+        return new ResponseEntity<>(notValidResponse, HttpStatusCode.valueOf(NOT_FOUND_STATUS));
     }
 
     private String getErrorMessage(ObjectError e) {

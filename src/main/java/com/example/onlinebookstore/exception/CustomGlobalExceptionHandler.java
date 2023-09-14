@@ -25,25 +25,25 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
             HttpStatusCode status,
             WebRequest request
     ) {
-        ArgumentNotValidResponse notValidResponse = new ArgumentNotValidResponse();
         String[] errors = ex.getBindingResult().getAllErrors()
                 .stream()
                 .map(this::getErrorMessage)
                 .toArray(String[]::new);
-        notValidResponse.setTimestamp(LocalDateTime.now());
-        notValidResponse.setStatus(HttpStatus.BAD_REQUEST);
-        notValidResponse.setErrors(errors);
-        return new ResponseEntity<>(notValidResponse, headers, status);
+        return createResponseEntityFromExceptionErrors(errors);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<Object> handleEntityNotFoundException(
             EntityNotFoundException e
     ) {
+        return createResponseEntityFromExceptionErrors(new String[]{e.getMessage()});
+    }
+
+    private ResponseEntity<Object> createResponseEntityFromExceptionErrors(String[] errors) {
         ArgumentNotValidResponse notValidResponse = new ArgumentNotValidResponse();
         notValidResponse.setTimestamp(LocalDateTime.now());
         notValidResponse.setStatus(HttpStatus.NOT_FOUND);
-        notValidResponse.setErrors(new String[]{e.getMessage()});
+        notValidResponse.setErrors(errors);
         return new ResponseEntity<>(notValidResponse, HttpStatusCode.valueOf(NOT_FOUND_STATUS));
     }
 

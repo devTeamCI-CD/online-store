@@ -9,5 +9,6 @@ import org.mapstruct.Mapper;
 @Mapper(config = MapperConfig.class)
 public interface CategoryMapper {
     CategoryResponseDto toResponseDto(Category category);
-    Category toEntity(CategoryRequestDto categoryDTO);
+
+    Category toEntity(CategoryRequestDto categoryDto);
 }

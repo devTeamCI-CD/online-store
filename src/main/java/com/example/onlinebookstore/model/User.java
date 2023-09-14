@@ -47,8 +47,6 @@ public class User implements UserDetails {
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     private Set<Role> roles;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;

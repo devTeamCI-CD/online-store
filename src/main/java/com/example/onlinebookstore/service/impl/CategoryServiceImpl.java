@@ -7,11 +7,10 @@ import com.example.onlinebookstore.mapper.CategoryMapper;
 import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.book.CategoryRepository;
 import com.example.onlinebookstore.service.CategoryService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -37,7 +36,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponseDto save(CategoryRequestDto categoryRequestDto) {
-        Category savedCategory = categoryRepository.save(categoryMapper.toEntity(categoryRequestDto));
+        Category savedCategory = categoryRepository.save(
+                categoryMapper.toEntity(categoryRequestDto));
         return categoryMapper.toResponseDto(savedCategory);
     }
 

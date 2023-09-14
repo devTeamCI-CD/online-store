@@ -6,15 +6,12 @@ import com.example.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.model.Category;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mapper(config = MapperConfig.class)
 public interface BookMapper {

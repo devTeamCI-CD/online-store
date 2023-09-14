@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Authentication management", description = "Controller for registering and authenticating users")
+@Tag(name = "Authentication management",
+        description = "Controller for registering and authenticating users")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
+
     @Operation(summary = "Login user",
             description = "Check if we have such user in DB")
     @PostMapping("/login")

@@ -33,6 +33,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRoles(Set.of(roleRepository.getRoleByName(RoleName.ROLE_USER)));
         User savedUser = userRepository.save(user);
-        return userMapper.toRegisterDto(savedUser);
+        return userMapper.toResponseDto(savedUser);
     }
 }

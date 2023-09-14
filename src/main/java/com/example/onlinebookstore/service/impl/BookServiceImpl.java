@@ -46,13 +46,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        isPresent(id);
         bookRepository.deleteById(id);
     }
 
     @Override
     public BookDto update(Long id, CreateBookRequestDto bookRequestDto) {
-        isPresent(id);
+        if (!bookRepository.existsById(id)) {
+            throw new EntityNotFoundException("Can't find book with id: " + id);
+        }
         Book bookForUpdate = bookMapper.toModel(bookRequestDto);
         bookForUpdate.setId(id);
         return bookMapper.toDto(bookRepository.save(bookForUpdate));
@@ -64,11 +65,5 @@ public class BookServiceImpl implements BookService {
         return bookRepository.findAll(bookSpecification, pageable).stream()
                 .map(bookMapper::toDto)
                 .collect(Collectors.toList());
-    }
-
-    private void isPresent(Long id) {
-        if (!bookRepository.existsById(id)) {
-            throw new EntityNotFoundException("Can't find book with id: " + id);
-        }
     }
 }

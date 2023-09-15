@@ -44,6 +44,8 @@ public class User implements UserDetails {
     private String lastName;
     @Column(name = "shipping_address")
     private String shippingAddress;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))

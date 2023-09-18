@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class CategoryRequestDto {
+public class CreateCategoryRequestDto {
     @NotBlank
     private String name;
     @Length(min = 1, max = 255)

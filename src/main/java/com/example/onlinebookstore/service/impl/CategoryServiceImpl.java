@@ -1,7 +1,7 @@
 package com.example.onlinebookstore.service.impl;
 
-import com.example.onlinebookstore.dto.category.CategoryRequestDto;
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
+import com.example.onlinebookstore.dto.category.CreateCategoryRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.CategoryMapper;
 import com.example.onlinebookstore.model.Category;
@@ -35,17 +35,17 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryResponseDto save(CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto save(CreateCategoryRequestDto createCategoryRequestDto) {
         Category savedCategory = categoryRepository.save(
-                categoryMapper.toEntity(categoryRequestDto));
+                categoryMapper.toEntity(createCategoryRequestDto));
         return categoryMapper.toResponseDto(savedCategory);
     }
 
     @Override
-    public CategoryResponseDto update(Long id, CategoryRequestDto categoryRequestDto) {
+    public CategoryResponseDto update(Long id, CreateCategoryRequestDto createCategoryRequestDto) {
         categoryRepository.findById(id).orElseThrow(
                         () -> new EntityNotFoundException("Can't find entity by id: " + id));
-        Category category = categoryMapper.toEntity(categoryRequestDto);
+        Category category = categoryMapper.toEntity(createCategoryRequestDto);
         category.setId(id);
         return categoryMapper.toResponseDto(categoryRepository.save(category));
     }

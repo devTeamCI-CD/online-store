@@ -23,6 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @EnableWebSecurity
 public class SecurityConfig {
+    private static final String AUTHORIZATION_URL = "/auth/**";
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
@@ -36,7 +37,7 @@ public class SecurityConfig {
         return http.cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        auth -> auth.requestMatchers("/auth/**")
+                        auth -> auth.requestMatchers(AUTHORIZATION_URL)
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())

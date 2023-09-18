@@ -1,8 +1,8 @@
 package com.example.onlinebookstore.controller;
 
 import com.example.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
-import com.example.onlinebookstore.dto.category.CategoryRequestDto;
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
+import com.example.onlinebookstore.dto.category.CreateCategoryRequestDto;
 import com.example.onlinebookstore.service.BookService;
 import com.example.onlinebookstore.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,7 +35,7 @@ public class CategoryController {
             description = "Create a new category and save to DB")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    public CategoryResponseDto create(@RequestBody @Valid CategoryRequestDto categoryDto) {
+    public CategoryResponseDto create(@RequestBody @Valid CreateCategoryRequestDto categoryDto) {
         return categoryService.save(categoryDto);
     }
 
@@ -58,7 +58,7 @@ public class CategoryController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public CategoryResponseDto update(@PathVariable Long id,
-                                      @RequestBody @Valid CategoryRequestDto categoryDto) {
+                                      @RequestBody @Valid CreateCategoryRequestDto categoryDto) {
         return categoryService.update(id, categoryDto);
     }
 

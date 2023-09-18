@@ -1,7 +1,7 @@
 package com.example.onlinebookstore.service;
 
-import com.example.onlinebookstore.dto.category.CategoryRequestDto;
 import com.example.onlinebookstore.dto.category.CategoryResponseDto;
+import com.example.onlinebookstore.dto.category.CreateCategoryRequestDto;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
@@ -10,9 +10,9 @@ public interface CategoryService {
 
     CategoryResponseDto getById(Long id);
 
-    CategoryResponseDto save(CategoryRequestDto categoryRequestDto);
+    CategoryResponseDto save(CreateCategoryRequestDto createCategoryRequestDto);
 
-    CategoryResponseDto update(Long id, CategoryRequestDto categoryRequestDto);
+    CategoryResponseDto update(Long id, CreateCategoryRequestDto createCategoryRequestDto);
 
     void deleteById(Long id);
 }

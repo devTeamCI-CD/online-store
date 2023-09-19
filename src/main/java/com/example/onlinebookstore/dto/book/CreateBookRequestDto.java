@@ -12,15 +12,12 @@ import org.hibernate.validator.constraints.ISBN;
 
 @Data
 public class CreateBookRequestDto {
-    @NotNull
     @NotBlank
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     private String title;
-    @NotNull
     @NotBlank
-    @Size(min = 1, max = 255)
+    @Size(max = 255)
     private String author;
-    @NotNull
     @NotBlank
     @ISBN
     private String isbn;

@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: add_admin_user
-      author: arsen
+      author: arsen_mehdalskyi
       changes:
         - insert:
             tableName: users

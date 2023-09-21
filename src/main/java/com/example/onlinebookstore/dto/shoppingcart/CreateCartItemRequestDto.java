@@ -1,4 +1,4 @@
-package com.example.onlinebookstore.dto.order;
+package com.example.onlinebookstore.dto.shoppingcart;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

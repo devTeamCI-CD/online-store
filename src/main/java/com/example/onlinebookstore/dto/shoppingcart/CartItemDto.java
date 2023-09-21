@@ -1,4 +1,4 @@
-package com.example.onlinebookstore.dto.order;
+package com.example.onlinebookstore.dto.shoppingcart;
 
 import lombok.Data;
 

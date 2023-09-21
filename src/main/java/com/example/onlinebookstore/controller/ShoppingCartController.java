@@ -1,9 +1,9 @@
 package com.example.onlinebookstore.controller;
 
-import com.example.onlinebookstore.dto.order.CartItemDto;
-import com.example.onlinebookstore.dto.order.CartItemUpdateRequestDto;
-import com.example.onlinebookstore.dto.order.CreateCartItemRequestDto;
-import com.example.onlinebookstore.dto.order.ShoppingCartDto;
+import com.example.onlinebookstore.dto.shoppingcart.CartItemDto;
+import com.example.onlinebookstore.dto.shoppingcart.CartItemUpdateRequestDto;
+import com.example.onlinebookstore.dto.shoppingcart.CreateCartItemRequestDto;
+import com.example.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Shopping Cart API",
         description = "Controller to perform actions on user's shopping cart")
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/carts")
 @RequiredArgsConstructor
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;

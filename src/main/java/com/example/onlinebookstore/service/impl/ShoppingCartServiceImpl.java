@@ -40,16 +40,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public ShoppingCartDto addToCart(CreateCartItemRequestDto request) {
         User user = userService.getAuthenticatedUser();
         Book book = bookRepository.findById(request.getBookId())
-                .orElseThrow(() -> new EntityNotFoundException("Book not found"));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Book with id: " + request.getBookId() + " not found"));
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId())
                 .orElseGet(() -> createNewShoppingCart(user));
 
-        CartItem cartItem = new CartItem();
-        cartItem.setBook(book);
-        cartItem.setShoppingCart(shoppingCart);
-        cartItem.setQuantity(request.getQuantity());
+        CartItem cartItem = createCartItem(book, shoppingCart, request.getQuantity());
         cartItemRepository.save(cartItem);
-
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
@@ -70,5 +67,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart newShoppingCart = new ShoppingCart();
         newShoppingCart.setUser(user);
         return shoppingCartRepository.save(newShoppingCart);
+    }
+
+    private CartItem createCartItem(Book book, ShoppingCart shoppingCart, int quantity) {
+        CartItem cartItem = new CartItem();
+        cartItem.setBook(book);
+        cartItem.setShoppingCart(shoppingCart);
+        cartItem.setQuantity(quantity);
+        return cartItem;
     }
 }

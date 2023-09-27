@@ -30,6 +30,5 @@ public class CustomMysqlContainer extends MySQLContainer<CustomMysqlContainer> {
 
     @Override
     public void stop() {
-
     }
 }

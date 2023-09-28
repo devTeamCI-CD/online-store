@@ -1,6 +1,7 @@
 package com.example.onlinebookstore.controller;
 
 import com.example.onlinebookstore.dto.book.BookDto;
+import com.example.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookstore.dto.book.BookSearchParameters;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.service.BookService;
@@ -73,7 +74,8 @@ public class BookController {
     @Operation(summary = "Search books",
             description = "Search for any books based on specific params using pagination")
     @GetMapping("/search")
-    public List<BookDto> search(BookSearchParameters searchParameters, Pageable pageable) {
+    public List<BookDtoWithoutCategoryIds> search(BookSearchParameters searchParameters,
+                                                  Pageable pageable) {
         return bookService.search(searchParameters, pageable);
     }
 }

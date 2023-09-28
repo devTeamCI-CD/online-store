@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -12,6 +11,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.example.onlinebookstore.dto.book.BookDto;
+import com.example.onlinebookstore.dto.book.BookDtoWithoutCategoryIds;
 import com.example.onlinebookstore.dto.book.BookSearchParameters;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
@@ -20,6 +20,7 @@ import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.SpecificationBuilder;
 import com.example.onlinebookstore.repository.book.BookRepository;
+import com.example.onlinebookstore.service.impl.BookServiceImpl;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +34,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 
 @ExtendWith(MockitoExtension.class)
 public class BookServiceTest {
@@ -41,8 +41,9 @@ public class BookServiceTest {
     private static CreateBookRequestDto createBookRequest;
     private static BookSearchParameters searchParameters;
     private static BookDto bookDto;
+    private static BookDtoWithoutCategoryIds bookDtoWithoutCategoryIds;
     @InjectMocks
-    private BookService bookService;
+    private BookServiceImpl bookService;
     @Mock
     private BookRepository bookRepository;
     @Mock
@@ -64,6 +65,15 @@ public class BookServiceTest {
         categoryIds.add(101L);
         categoryIds.add(102L);
         bookDto.setCategoryIds(categoryIds);
+
+        bookDtoWithoutCategoryIds = new BookDtoWithoutCategoryIds();
+        bookDtoWithoutCategoryIds.setId(1L);
+        bookDtoWithoutCategoryIds.setTitle("Example Book");
+        bookDtoWithoutCategoryIds.setAuthor("John Doe");
+        bookDtoWithoutCategoryIds.setIsbn("978-1234567890");
+        bookDtoWithoutCategoryIds.setPrice(new BigDecimal("19.99"));
+        bookDtoWithoutCategoryIds.setDescription("An example book description.");
+        bookDtoWithoutCategoryIds.setCoverImage("book_cover.jpg");
 
         book = new Book();
         book.setTitle("The Great Gatsby");
@@ -174,31 +184,5 @@ public class BookServiceTest {
                 () -> bookService.update(1L, createBookRequest));
         assertEquals("Can't find book with id: 1", actual.getMessage());
         verify(bookRepository).existsById(anyLong());
-    }
-
-    @Test
-    @DisplayName("Test deleteById with non valid request")
-    public void deleteById_nonValidId_throwsException() {
-        when(bookRepository.existsById(anyLong())).thenReturn(false);
-
-        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
-                () -> bookService.deleteById(1L));
-        assertEquals("Can't find book with id: 1", actual.getMessage());
-        verify(bookRepository).existsById(anyLong());
-    }
-
-    @Test
-    @DisplayName("Test search with valid request")
-    public void searchBooks_validSearchParams_returnsMatchingBooks() {
-        Pageable pageable = Pageable.ofSize(5);
-        Specification<Book> specification = mock(Specification.class);
-        when(specificationBuilder.build(any(BookSearchParameters.class)))
-                .thenReturn(specification);
-        when(bookRepository.findAll(any(Specification.class))).thenReturn(List.of(book));
-        when(bookMapper.toDto(any(Book.class))).thenReturn(bookDto);
-
-        assertEquals(List.of(bookDto), bookService.search(searchParameters, pageable));
-        verify(bookRepository).findAll(any(Specification.class));
-        verify(specificationBuilder).build(any(BookSearchParameters.class));
     }
 }

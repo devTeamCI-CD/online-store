@@ -7,8 +7,8 @@ import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.BookMapper;
 import com.example.onlinebookstore.model.Book;
+import com.example.onlinebookstore.repository.SpecificationBuilder;
 import com.example.onlinebookstore.repository.book.BookRepository;
-import com.example.onlinebookstore.repository.book.BookSpecificationBuilder;
 import com.example.onlinebookstore.service.BookService;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
-    private final BookSpecificationBuilder bookSpecificationBuilder;
+    private final SpecificationBuilder<Book, BookSearchParameters> bookSpecificationBuilder;
 
     @Override
     public BookDto save(CreateBookRequestDto bookRequestDto) {

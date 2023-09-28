@@ -8,11 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.repository.book.BookRepository;
+import com.example.onlinebookstore.repository.book.CategoryRepository;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-
-import com.example.onlinebookstore.repository.book.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,8 @@ public class BookRepositoryTest {
     void setUp() {
         expectedBook = new Book();
         expectedBook.setId(1L);
-        expectedBook.setCategories(Collections.singleton(categoryRepository.findById(1L).orElseThrow()));
+        expectedBook.setCategories(Collections.singleton(
+                categoryRepository.findById(1L).orElseThrow()));
         expectedBook.setIsbn("ISBN-001");
         expectedBook.setTitle("Book 1");
         expectedBook.setAuthor("Author 1");
@@ -51,7 +51,8 @@ public class BookRepositoryTest {
         expectedBook2.setPrice(BigDecimal.valueOf(30));
         expectedBook2.setDescription("Description for Book 2");
         expectedBook2.setCoverImage("image2.jpg");
-        expectedBook2.setCategories(Collections.singleton(categoryRepository.findById(2L).orElseThrow()));
+        expectedBook2.setCategories(Collections.singleton(
+                categoryRepository.findById(2L).orElseThrow()));
     }
 
     @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)

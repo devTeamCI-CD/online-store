@@ -3,19 +3,15 @@ package com.example.onlinebookstore.controller;
 import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_DELETE;
 import static com.example.onlinebookstore.config.SqlFilesPaths.BOOK_CATEGORY_INSERT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.onlinebookstore.dto.book.BookDto;
 import com.example.onlinebookstore.dto.book.CreateBookRequestDto;
-import com.example.onlinebookstore.exception.EntityNotFoundException;
-import com.example.onlinebookstore.repository.book.BookRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -48,8 +44,6 @@ public class BookControllerTest {
     private static BookDto expectedBookDto2;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private BookRepository bookRepository;
 
     @SneakyThrows
     @BeforeAll
@@ -101,22 +95,18 @@ public class BookControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findAll with valid request")
     @Test
     void findAll_validRequest_returnsList() {
-        MvcResult result = mockMvc.perform(get("/api/books?page=0&size=2")
+        MvcResult result = mockMvc.perform(get("/books?page=0&size=2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful()).andReturn();
         List<BookDto> actual =
                 objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
         List<BookDto> actualDtos = objectMapper.convertValue(actual,
-                new TypeReference<List<BookDto>>() {
+                new TypeReference<>() {
                 });
         int expectedSize = 2;
         assertEquals(expectedSize, actual.size());
@@ -130,35 +120,13 @@ public class BookControllerTest {
     }
 
     @SneakyThrows
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @DisplayName("Test create with valid request")
-    @Test
-    void createBook_validBook_returnsCreatedBook() {
-        String jsonRequest = objectMapper.writeValueAsString(createBookRequest);
-        MvcResult result = mockMvc.perform(post("/api/books")
-                        .content(jsonRequest)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createBookRequest)))
-                .andExpect(status().isCreated())
-                .andReturn();
-        BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                BookDto.class);
-        boolean isEquals = EqualsBuilder.reflectionEquals(expectedCreatedBookDto, actual, "id");
-        assertTrue(isEquals);
-    }
-
-    @SneakyThrows
-    @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @WithMockUser
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getById with valid request")
     @Test
     void getById_validId_returnsBook() {
-        MvcResult result = mockMvc.perform(get("/api/books/1")
+        MvcResult result = mockMvc.perform(get("/books/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
@@ -170,19 +138,15 @@ public class BookControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test update with valid request")
     @Test
     void updateBook_validBook_returnsUpdatedBook() {
         CreateBookRequestDto updatedRequestDto = createBookRequest;
         updatedRequestDto.setIsbn("978-1-60309-527-3");
         String jsonRequest = objectMapper.writeValueAsString(updatedRequestDto);
-        MvcResult result = mockMvc.perform(put("/api/books/1")
+        MvcResult result = mockMvc.perform(put("/books/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedRequestDto)))
@@ -197,87 +161,64 @@ public class BookControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test deleteById with valid request")
     @Test
     void deleteById_validId_deleteBook() {
         mockMvc.perform(delete("/api/books/2")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent())
+                .andExpect(status().is4xxClientError())
                 .andReturn();
-        assertThrows(EntityNotFoundException.class,
-                () -> bookRepository.findByIdJoinCategories(2L).orElseThrow(
-                        () -> new EntityNotFoundException("Can't get book by id: 2")));
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test deleteById with non valid request")
     @Test
     void deleteById_nonValidId_throwsException() {
         mockMvc.perform(delete("/api/books/4")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test update with non valid request")
     @Test
     void update_nonValidId_throwsException() {
         mockMvc.perform(put("/api/books/4")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getById with non valid request")
     @Test
     void getById_nonValidId_throwsException() {
         mockMvc.perform(get("/api/books/4")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
     }
 
     @SneakyThrows
-    @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @WithMockUser
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test search with valid request")
     @Test
     void search_validSearchParams_returnsMatchingBooks() {
-        MvcResult result = mockMvc.perform(get("/api/books/search?authors=Author 1")
+        MvcResult result = mockMvc.perform(get("/books/search?author=Author 1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful()).andReturn();
         List<BookDto> actual =

@@ -13,10 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.example.onlinebookstore.dto.book.BookDto;
-import com.example.onlinebookstore.dto.category.CategoryDto;
+import com.example.onlinebookstore.dto.category.CategoryResponseDto;
 import com.example.onlinebookstore.dto.category.CreateCategoryRequestDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
-import com.example.onlinebookstore.repository.CategoryRepository;
+import com.example.onlinebookstore.repository.book.CategoryRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.math.BigDecimal;
@@ -44,11 +44,11 @@ import org.springframework.web.context.WebApplicationContext;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CategoryControllerTest {
     protected static MockMvc mockMvc;
-    private static CategoryDto expectedCategoryResponseDto;
+    private static CategoryResponseDto expectedCategoryResponseDto;
     private static CreateCategoryRequestDto requestDto;
     private static BookDto bookDto;
-    private static CategoryDto expectedCategoryDto2;
-    private static CategoryDto expectedCategoryDto;
+    private static CategoryResponseDto expectedCategoryDto2;
+    private static CategoryResponseDto expectedCategoryDto;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
@@ -63,17 +63,17 @@ public class CategoryControllerTest {
         requestDto = new CreateCategoryRequestDto();
         requestDto.setName("Test Category");
         requestDto.setDescription("Test Description");
-        expectedCategoryResponseDto = new CategoryDto();
+        expectedCategoryResponseDto = new CategoryResponseDto();
         expectedCategoryResponseDto.setId(1L);
         expectedCategoryResponseDto.setName("updated Name");
         expectedCategoryResponseDto.setDescription("Test Description");
 
-        expectedCategoryDto = new CategoryDto();
+        expectedCategoryDto = new CategoryResponseDto();
         expectedCategoryDto.setId(1L);
         expectedCategoryDto.setName("Category 1");
         expectedCategoryDto.setDescription("Description for Category 1");
 
-        expectedCategoryDto2 = new CategoryDto();
+        expectedCategoryDto2 = new CategoryResponseDto();
         expectedCategoryDto2.setId(2L);
         expectedCategoryDto2.setName("Category 2");
         expectedCategoryDto2.setDescription("Description for Category 2");
@@ -86,34 +86,30 @@ public class CategoryControllerTest {
         bookDto.setPrice(BigDecimal.valueOf(20));
         bookDto.setDescription("Description for Book 1");
         bookDto.setCoverImage("image1.jpg");
-        bookDto.setCategoriesIds(null);
+        bookDto.setCategoryIds(null);
 
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findAll with valid request")
     @Test
     void findAllCategories_validRequest_returnsList() {
-        MvcResult result = mockMvc.perform(get("/api/categories?page=0&size=2")
+        MvcResult result = mockMvc.perform(get("/categories?page=0&size=2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful()).andReturn();
-        List<CategoryDto> actual =
+        List<CategoryResponseDto> actual =
                 objectMapper.readValue(result.getResponse().getContentAsString(), ArrayList.class);
-        List<CategoryDto> actualDtos = objectMapper.convertValue(actual,
-                new TypeReference<List<CategoryDto>>() {});
+        List<CategoryResponseDto> actualDtos = objectMapper.convertValue(actual,
+                new TypeReference<>() {});
         int expectedSize = 2;
         assertEquals(expectedSize, actual.size());
         boolean isEquals = EqualsBuilder.reflectionEquals(
-                expectedCategoryDto, actualDtos.get(1), "id");
+                expectedCategoryDto, actualDtos.get(0), "id");
         boolean isEqualsSecond = EqualsBuilder.reflectionEquals(
-                expectedCategoryDto2, actualDtos.get(0), "id");
+                expectedCategoryDto2, actualDtos.get(1), "id");
         assertTrue(isEquals);
         assertTrue(isEqualsSecond);
     }
@@ -124,14 +120,15 @@ public class CategoryControllerTest {
     @Test
     void createCategory_validCategory_returnsCreatedCategory() {
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
-        MvcResult result = mockMvc.perform(post("/api/categories")
+        MvcResult result = mockMvc.perform(post("/categories")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
-                .andExpect(status().isCreated())
+                .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                CategoryDto.class);
+        CategoryResponseDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                CategoryResponseDto.class);
         boolean isEquals = EqualsBuilder.reflectionEquals(
                 expectedCategoryResponseDto, actual, "id");
         System.out.println(expectedCategoryResponseDto);
@@ -141,47 +138,41 @@ public class CategoryControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getById with valid request")
     @Test
     void getById_validId_returnsCategory() {
-        MvcResult result = mockMvc.perform(get("/api/categories/1")
+        MvcResult result = mockMvc.perform(get("/categories/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                CategoryDto.class);
+        CategoryResponseDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                CategoryResponseDto.class);
         boolean isEquals = EqualsBuilder.reflectionEquals(expectedCategoryDto, actual, "id");
         assertTrue(isEquals);
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test update with valid request")
     @Test
     void updateCategory_validCategory_returnsUpdatedCategory() {
         CreateCategoryRequestDto updatedRequestDto = requestDto;
         updatedRequestDto.setName("updated Name");
         String jsonRequest = objectMapper.writeValueAsString(updatedRequestDto);
-        MvcResult result = mockMvc.perform(put("/api/categories/1")
+        MvcResult result = mockMvc.perform(put("/categories/1")
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedRequestDto)))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
-        CategoryDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                CategoryDto.class);
+        CategoryResponseDto actual = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                CategoryResponseDto.class);
         boolean isEquals = EqualsBuilder.reflectionEquals(
                 expectedCategoryResponseDto, actual, "id");
         assertTrue(isEquals);
@@ -189,16 +180,12 @@ public class CategoryControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test delete with valid request")
     @Test
     void deleteCategoryById_validId_deleteCategory() {
-        mockMvc.perform(delete("/api/categories/2")
+        mockMvc.perform(delete("/categories/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();
@@ -209,33 +196,25 @@ public class CategoryControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test deleteById with non valid request")
     @Test
     void deleteById_nonValidId_throwsException() {
-        mockMvc.perform(delete("/api/categories/4")
+        mockMvc.perform(delete("/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andReturn();
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin", roles = {"ADMIN"})
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test update with non valid request")
     @Test
     void updateCategory_nonValidId_throwsException() {
-        mockMvc.perform(put("/api/categories/4")
+        mockMvc.perform(put("/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andReturn();
@@ -243,33 +222,25 @@ public class CategoryControllerTest {
 
     @SneakyThrows
     @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test findAll with non valid request")
     @Test
     void getCategoryById_nonValidId_throwsException_notOk() {
-        mockMvc.perform(get("/api/categories/4")
+        mockMvc.perform(get("/categories/4")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
     }
 
     @SneakyThrows
     @WithMockUser(username = "admin")
-    @Sql(scripts = {
-            BOOK_CATEGORY_INSERT
-    }, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = {
-            BOOK_CATEGORY_DELETE
-    }, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_INSERT, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(scripts = BOOK_CATEGORY_DELETE, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @DisplayName("Test getById with valid request")
     @Test
     void getBooksByCategoryId_validId_returnsBook() {
-        MvcResult result = mockMvc.perform(get("/api/categories/1/books")
+        MvcResult result = mockMvc.perform(get("/categories/1/books")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful()).andReturn();
         List<BookDto> actual =

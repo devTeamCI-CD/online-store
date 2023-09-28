@@ -9,9 +9,8 @@ import com.example.onlinebookstore.enums.RoleName;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.model.Role;
 import com.example.onlinebookstore.model.User;
-import java.util.Collections;
-
 import com.example.onlinebookstore.repository.user.UserRepository;
+import java.util.Collections;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,7 @@ public class UserRepositoryTest {
         expectedUser.setId(2L);
         expectedUser.setFirstName("UserName 1");
         expectedUser.setLastName("LastName 1");
-        expectedUser.setPassword("Password");
+        expectedUser.setPassword("Password 1");
         expectedUser.setEmail("email@gmail.com");
         expectedUser.setShippingAddress("Address 1");
         Role role = new Role();

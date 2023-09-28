@@ -11,6 +11,7 @@ import com.example.onlinebookstore.dto.user.UserLoginRequestDto;
 import com.example.onlinebookstore.dto.user.UserLoginResponseDto;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.security.JwtUtil;
+import com.example.onlinebookstore.service.impl.AuthenticationServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ public class AuthenticationServiceTest {
     @Mock
     private AuthenticationManager authenticationManager;
     @InjectMocks
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
 
     @BeforeAll
     static void beforeAll() {

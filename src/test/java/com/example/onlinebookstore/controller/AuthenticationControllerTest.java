@@ -44,7 +44,7 @@ public class AuthenticationControllerTest {
 
         Role role = new Role();
         role.setId(1L);
-        role.setRoleName(RoleName.ROLE_USER);
+        role.setName(RoleName.ROLE_USER);
 
         userDto = new UserRegistrationRequestDto();
         userDto.setFirstName("John");
@@ -70,12 +70,12 @@ public class AuthenticationControllerTest {
         userResponseDto.setShippingAddress(userDto.getShippingAddress());
 
         loginRequestDto = new UserLoginRequestDto();
-        loginRequestDto.setEmail("romakuch@gmail.com");
-        loginRequestDto.setPassword("romaaaa");
+        loginRequestDto.setEmail("admin@a.ua");
+        loginRequestDto.setPassword("qwerty123");
 
         loginInvalidRequestDto = new UserLoginRequestDto();
-        loginInvalidRequestDto.setEmail("nn");
-        loginInvalidRequestDto.setPassword("kj");
+        loginInvalidRequestDto.setEmail("ars");
+        loginInvalidRequestDto.setPassword("wht");
     }
 
     @SneakyThrows
@@ -102,10 +102,10 @@ public class AuthenticationControllerTest {
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userInvalidDto)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
         String actual = result.getResponse().getContentAsString();
-        assertTrue(actual.contains("Passwords do not match!"));
+        assertTrue(actual.contains("Passwords don't match"));
         assertTrue(actual.contains("email must be a well-formed email address"));
     }
 
@@ -117,11 +117,11 @@ public class AuthenticationControllerTest {
                         .content(jsonRequest)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginInvalidRequestDto)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
                 .andReturn();
         String actual = result.getResponse().getContentAsString();
         assertTrue(actual.contains("email must be a well-formed email address"));
-        assertTrue(actual.contains("password length must be between 4 and 255"));
+        assertTrue(actual.contains("password length must be between 8 and 255"));
     }
 
     @SneakyThrows

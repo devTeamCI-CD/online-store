@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -42,6 +44,8 @@ public class Order {
     @Column(nullable = false)
     private String shippingAddress;
     @OneToMany(mappedBy = "order")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<OrderItem> orderItems;
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;

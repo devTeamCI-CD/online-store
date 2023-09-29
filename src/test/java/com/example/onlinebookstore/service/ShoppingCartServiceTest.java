@@ -110,10 +110,10 @@ public class ShoppingCartServiceTest {
         EntityNotFoundException actual = assertThrows(EntityNotFoundException.class,
                 () -> shoppingCartService.updateCartItem(1L, UPDATE_REQUEST_DTO));
 
-        String expectedMessage = "There is no cart belonging to current user";
+        String expectedMessage = "There is no cart belonging to user with id: 2";
         assertEquals(expectedMessage, actual.getMessage());
 
-        verify(userService).getAuthenticatedUser();
+        verify(userService, times(2)).getAuthenticatedUser();
         verify(shoppingCartRepository).findByUserId(anyLong());
         verifyNoMoreInteractions(userService);
     }

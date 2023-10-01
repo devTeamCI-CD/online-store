@@ -28,7 +28,7 @@ public class UserRepositoryTest {
     @BeforeAll
     static void beforeAll() {
         expectedUser = new User();
-        expectedUser.setId(2L);
+        expectedUser.setId(3L);
         expectedUser.setFirstName("UserName 1");
         expectedUser.setLastName("LastName 1");
         expectedUser.setPassword("Password 1");

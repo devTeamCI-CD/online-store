@@ -188,8 +188,8 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();
-        EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class,
-                () -> categoryRepository.findById(2L).orElseThrow(
+        EntityNotFoundException entityNotFoundException = assertThrows(
+                EntityNotFoundException.class, () -> categoryRepository.findById(2L).orElseThrow(
                         () -> new EntityNotFoundException("Can't get category by id: 2")));
         assertEquals(expectedMessage, entityNotFoundException.getMessage());
     }

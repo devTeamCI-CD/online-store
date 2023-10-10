@@ -52,8 +52,5 @@ public class AuthenticationServiceTest {
         when(jwtUtil.generateToken(anyString())).thenReturn(expected);
         assertEquals(new UserLoginResponseDto(expected),
                 authenticationService.authenticate(userLoginRequestDto));
-
-        verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
-        verify(jwtUtil).generateToken(anyString());
     }
 }

@@ -131,8 +131,6 @@ public class CategoryControllerTest {
                 CategoryResponseDto.class);
         boolean isEquals = EqualsBuilder.reflectionEquals(
                 expectedCategoryResponseDto, actual, "id");
-        System.out.println(expectedCategoryResponseDto);
-        System.out.println(actual);
         assertTrue(isEquals);
     }
 
@@ -185,13 +183,15 @@ public class CategoryControllerTest {
     @DisplayName("Test delete with valid request")
     @Test
     void deleteCategoryById_validId_deleteCategory() {
+        String expectedMessage = "Can't get category by id: 2";
         mockMvc.perform(delete("/categories/2")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();
-        assertThrows(EntityNotFoundException.class,
+        EntityNotFoundException entityNotFoundException = assertThrows(EntityNotFoundException.class,
                 () -> categoryRepository.findById(2L).orElseThrow(
                         () -> new EntityNotFoundException("Can't get category by id: 2")));
+        assertEquals(expectedMessage, entityNotFoundException.getMessage());
     }
 
     @SneakyThrows

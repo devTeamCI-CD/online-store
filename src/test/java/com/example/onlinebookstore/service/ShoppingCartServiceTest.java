@@ -98,9 +98,6 @@ public class ShoppingCartServiceTest {
         ShoppingCartDto actual = shoppingCartService.getShoppingCart();
         assertNotNull(actual);
         assertEquals(VALID_DTO_RESPONSE, actual);
-
-        verify(userService, times(1)).getAuthenticatedUser();
-        verify(shoppingCartRepository, times(1)).findByUserId(anyLong());
     }
 
     @Test

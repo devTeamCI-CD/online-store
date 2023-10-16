@@ -69,9 +69,9 @@ You can interact with the Book Store API in two ways:
 
     - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
     - [MySQL database](https://www.mysql.com/downloads/)
-    - [Docker](https://docs.docker.com/get-docker/)
+    - [Docker](https://docs.docker.com/get-docker/) (Optional)
 
-   ### Installation
+   ### Installation with Docker
 
    Follow these steps to set up and run the Book Store API on your local machine:
 
@@ -103,7 +103,39 @@ You can interact with the Book Store API in two ways:
 
    Make sure you have Docker and Docker Compose installed and properly configured on your machine before running the last two commands.
 
-   You've now successfully set up and launched the Book Store API locally.
+    ### Installation without Docker
+
+    Follow these steps to set up and run the Book Store API on your local machine:
+
+    1. **Clone the Repository:**
+
+       ```shell
+       git clone https://github.com/Zel1oy/online-book-store.git
+       cd online-book-store
+       ```
+
+    2. **Build with Maven:**
+
+       ```shell
+       mvn clean install
+       ```
+
+    3. **Comment docker compose dependency:**
+
+        You should comment 38-41 lines of pom.xml code and reload all maven projects. The dependency should look like this below:
+        ```
+       <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-docker-compose</artifactId>
+        </dependency>-->
+       ```
+
+    4. **Configure a DB on your local machine:**
+        
+        You should create *book_store* schema and edit username and password in *application.properties* according to your credentials
+
+
+   **You've now successfully set up and launched the Book Store API locally.**
 
 ## Postman Collection
 For your convenience, I've created a Postman collection that includes sample requests for various API endpoints. You can download it [here](BookStore-api.postman_collection.json) and import it into your Postman workspace to get started quickly.

@@ -1,7 +1,7 @@
 # Book Store API
 
 Welcome to the Book Store API! This endeavor was ignited by the quest for a dynamic and effective solution to revolutionize the book store industry. Whether you're stewarding a brick-and-mortar haven for book lovers or curating an online literary emporium, our API is your steadfast companion, equipped to empower you with the tools essential for effortlessly managing your book inventory, organizing customer data, and orchestrating sales transactions with unmatched finesse.
-### Watch a [video](https://www.loom.com/share/6497c8699051498fabf223e911bdc978?sid=85d51207-d1a4-4a11-bff5-bd003f44f8de) about this project
+### Watch a [video](https://www.loom.com/share/6e47d021bfb043ebaa6a13b781f8a68d?sid=18eed066-3796-4b50-87f0-09795b6ff540) about this project
 ## Table of Contents
 
 - [Technologies and Tools Used](#technologies-and-tools-used)

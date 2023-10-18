@@ -16,6 +16,7 @@ import com.example.onlinebookstore.repository.cart.CartItemRepository;
 import com.example.onlinebookstore.repository.cart.ShoppingCartRepository;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import com.example.onlinebookstore.service.UserService;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
+    @Transactional
     public ShoppingCartDto addToCart(CreateCartItemRequestDto request) {
         User user = userService.getAuthenticatedUser();
         Book book = bookRepository.findById(request.getBookId())
@@ -48,11 +50,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         CartItem cartItem = createCartItem(book, shoppingCart, request.getQuantity());
         cartItemRepository.save(cartItem);
+        shoppingCart.getCartItems().add(cartItem);
 
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
     @Override
+    @Transactional
     public CartItemDto updateCartItem(Long cartItemId, CartItemUpdateRequestDto request) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(
                 userService.getAuthenticatedUser().getId())

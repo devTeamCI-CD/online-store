@@ -8,6 +8,7 @@ import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.OrderItemMapper;
 import com.example.onlinebookstore.mapper.OrderMapper;
 import com.example.onlinebookstore.model.Order;
+import com.example.onlinebookstore.model.OrderItem;
 import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.order.OrderItemRepository;
@@ -15,7 +16,9 @@ import com.example.onlinebookstore.repository.order.OrderRepository;
 import com.example.onlinebookstore.service.OrderService;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import com.example.onlinebookstore.service.UserService;
+import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,14 +34,17 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     @Override
+    @Transactional
     public OrderDto completeOrder(CompleteOrderDto request) {
         User user = userService.getAuthenticatedUser();
         ShoppingCart shoppingCart = shoppingCartService.findCartByCurrentUser(user.getId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Can't find shopping cart for user:" + user.getUsername()));
-        Order order = orderMapper.toOrder(request, shoppingCart);
+        Order order = orderRepository.save(orderMapper.toOrder(request, shoppingCart));
+        List<OrderItem> orderItemList = orderItemRepository.saveAll(order.getOrderItems());
+        order.setOrderItems(Set.copyOf(orderItemList));
         shoppingCartService.cleanUp(shoppingCart);
-        return orderMapper.toDto(orderRepository.save(order));
+        return orderMapper.toDto(order);
     }
 
     @Override
@@ -51,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderDto updateStatus(Long orderId, OrderUpdateRequestDto request) {
         Order order = orderRepository.findByIdWithItems(orderId)
                 .orElseThrow(

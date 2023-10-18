@@ -16,10 +16,8 @@ import com.example.onlinebookstore.repository.cart.CartItemRepository;
 import com.example.onlinebookstore.repository.cart.ShoppingCartRepository;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import com.example.onlinebookstore.service.UserService;
-import java.util.Optional;
-import java.util.Set;
-
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

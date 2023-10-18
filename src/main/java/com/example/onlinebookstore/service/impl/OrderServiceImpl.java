@@ -16,10 +16,9 @@ import com.example.onlinebookstore.repository.order.OrderRepository;
 import com.example.onlinebookstore.service.OrderService;
 import com.example.onlinebookstore.service.ShoppingCartService;
 import com.example.onlinebookstore.service.UserService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Set;
-
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

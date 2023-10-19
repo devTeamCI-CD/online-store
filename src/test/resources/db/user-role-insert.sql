@@ -1,3 +1,7 @@
+DELETE FROM user_role;
+
+DELETE FROM users;
+
 INSERT INTO users (id,first_name, last_name, password, email, shipping_address, is_deleted)
 VALUES
     (3,'UserName 1', 'LastName 1', 'Password 1', 'email@gmail.com', 'Address 1', false),

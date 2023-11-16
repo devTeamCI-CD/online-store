@@ -16,6 +16,9 @@ databaseChangeLog:
                   name: email
                   value: test@example.com
               - column:
+                  name: phone_number
+                  value: +380960102771
+              - column:
                   name: password
                   value: $2a$10$rF8rPFrnwra1AnXdOF3Bc.0jRidDW0KObAq8GyoNcJv.owg/3dsYO
               - column:

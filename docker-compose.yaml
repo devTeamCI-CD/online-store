@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   mysqldb:
-    platform: linux/x86_64
+    platform: linux/amd64
     image: mysql:8
     restart: unless-stopped
     env_file: ./.env
@@ -15,6 +15,7 @@ services:
     depends_on:
       - mysqldb
     restart: on-failure
+    platform: linux/amd64
     image: arsen/book-store
     build: .
     env_file: ./.env

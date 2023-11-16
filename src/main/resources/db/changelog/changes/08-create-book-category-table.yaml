@@ -1,17 +1,17 @@
 databaseChangeLog:
   - changeSet:
-      id: create_book_category_table
+      id: create_product_category_table
       author: arsen_mehdalskyi
       changes:
         - createTable:
-            tableName: book_category
+            tableName: product_category
             columns:
               - column:
-                  name: book_id
+                  name: product_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_book_id
-                    references: books(id)
+                    foreignKeyName: fk_product_id
+                    references: products(id)
                     nullable: false
               - column:
                   name: category_id

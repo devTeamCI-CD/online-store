@@ -1,4 +1,4 @@
-# Book Store API
+# Product Store API
 
 Welcome to the Book Store API! This endeavor was ignited by the quest for a dynamic and effective solution to revolutionize the book store industry. Whether you're stewarding a brick-and-mortar haven for book lovers or curating an online literary emporium, our API is your steadfast companion, equipped to empower you with the tools essential for effortlessly managing your book inventory, organizing customer data, and orchestrating sales transactions with unmatched finesse.
 ### Watch a [video](https://www.loom.com/share/6e47d021bfb043ebaa6a13b781f8a68d?sid=18eed066-3796-4b50-87f0-09795b6ff540) about this project
@@ -34,9 +34,9 @@ This API is built using modern technologies and tools to ensure reliability, sec
 
 - **AuthenticationController**: Handles user authentication and registration.
 
-- **BookController**: Handles book-related operations, including creation, retrieval, update, and deletion of books.
+- **BookController**: Handles book-related operations, including creation, retrieval, update, and deletion of products.
 
-- **CategoryController**: Manages categories, enabling admins to create, update, delete categories, and retrieve books by category.
+- **CategoryController**: Manages categories, enabling admins to create, update, delete categories, and retrieve products by category.
 
 - **ShoppingCartController**: Manages shopping cart information, allowing users to create, retrieve, update, and delete cart items.
 
@@ -138,7 +138,7 @@ You can interact with the Book Store API in two ways:
    **You've now successfully set up and launched the Book Store API locally.**
 
 ## Postman Collection
-For your convenience, I've created a Postman collection that includes sample requests for various API endpoints. You can download it [here](BookStore-api.postman_collection.json) and import it into your Postman workspace to get started quickly.
+For your convenience, I've created a Postman collection that includes sample requests for various API endpoints. You can download it [here](productstore-api.postman_collection.json) and import it into your Postman workspace to get started quickly.
 
 ## Challenges and Solutions
 
@@ -146,7 +146,7 @@ Building the Online Book Store project was a fulfilling endeavor, marked by vari
 
 ### Challenge 1: Data Modeling and build different views from our domain models
 
-**Issue:** Designing a flexible data model for books, users, orders, and categories was complex and showing user only necessary data.
+**Issue:** Designing a flexible data model for products, users, orders, and categories was complex and showing user only necessary data.
 
 **Solution:** We used Spring Data JPA and Liquibase to create an adaptable schema and pattern Dto.
 
@@ -167,6 +167,6 @@ If you'd like to contribute to this project, I always ready for conversation
 on [GitHub](https://github.com/Zel1oy)
 
 ## Conclusion
-The Bookstore API provides a solid foundation for building a book-selling platform. Whether you're starting a new online bookstore or enhancing an existing one, this API can help you manage books, orders, and customers efficiently. Feel free to reach out if you have any questions or need assistance.
+The productstore API provides a solid foundation for building a book-selling platform. Whether you're starting a new online productstore or enhancing an existing one, this API can help you manage products, orders, and customers efficiently. Feel free to reach out if you have any questions or need assistance.
 
 Thank you for your interest in Book Store API!

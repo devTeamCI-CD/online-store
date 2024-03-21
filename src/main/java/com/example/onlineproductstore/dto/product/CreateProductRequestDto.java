@@ -22,9 +22,7 @@ public class CreateProductRequestDto {
     private BigDecimal price;
     @Size(min = 1, max = 255)
     private String description;
-    @NotEmpty
-    @NotNull
     private String image;
     @NotEmpty
-    private Set<Long> categoryIds;
+    private Set<Long> categories;
 }

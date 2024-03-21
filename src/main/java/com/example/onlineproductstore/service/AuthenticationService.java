@@ -5,5 +5,4 @@ import com.example.onlineproductstore.dto.user.UserLoginResponseDto;
 
 public interface AuthenticationService {
     UserLoginResponseDto authenticate(UserLoginRequestDto request);
-
 }

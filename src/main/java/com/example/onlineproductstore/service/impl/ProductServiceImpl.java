@@ -10,6 +10,7 @@ import com.example.onlineproductstore.model.Product;
 import com.example.onlineproductstore.repository.SpecificationBuilder;
 import com.example.onlineproductstore.repository.product.ProductRepository;
 import com.example.onlineproductstore.service.ProductService;
+import com.example.onlineproductstore.updatesubscription.observable.ProductObservable;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final SpecificationBuilder<Product,
             ProductSearchParameters> productSpecificationBuilder;
+    private final ProductObservable productObservable;
 
     @Override
     public ProductDto save(CreateProductRequestDto productRequestDto) {
@@ -58,6 +60,7 @@ public class ProductServiceImpl implements ProductService {
         }
         Product productForUpdate = productMapper.toModel(productRequestDto);
         productForUpdate.setId(id);
+        productObservable.notifyObservers(productForUpdate);
         return productMapper.toDto(productRepository.save(productForUpdate));
     }
 

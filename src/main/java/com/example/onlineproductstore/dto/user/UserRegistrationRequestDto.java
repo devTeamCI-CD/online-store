@@ -22,7 +22,7 @@ public class UserRegistrationRequestDto {
     @Length(min = 8, max = 255)
     private String repeatPassword;
     @NotNull
-    @Pattern(regexp = "(^$|[0-9]{10})")
+    @Pattern(regexp = "^\\+?3?8?(0\\d{9})$")
     private String phoneNumber;
     @NotNull
     @Length(min = 1, max = 255)

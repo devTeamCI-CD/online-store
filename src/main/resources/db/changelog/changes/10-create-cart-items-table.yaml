@@ -25,8 +25,8 @@ databaseChangeLog:
                   name: product_id
                   type: bigint
                   constraints:
-                    foreignKeyName: fk_books_cart_items
-                    referencedTableName: books
+                    foreignKeyName: fk_products_cart_items
+                    referencedTableName: products
                     referencedColumnNames: id
                     nullable: false
               - column:

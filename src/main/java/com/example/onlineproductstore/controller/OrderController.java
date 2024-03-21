@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
     private final OrderService orderService;
 
     @Operation(summary = "Complete an order",
             description = "Complete an order with the provided shipping address")
-    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public OrderDto placeOrder(@RequestBody @Valid CompleteOrderDto request) {
         return orderService.completeOrder(request);
@@ -37,7 +38,6 @@ public class OrderController {
 
     @Operation(summary = "Get all user's orders",
             description = "Retrieve a list of user's order history")
-    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public List<OrderDto> getOrderHistory(Pageable pageable) {
         return orderService.getAll(pageable);

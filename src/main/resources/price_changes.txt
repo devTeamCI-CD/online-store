@@ -1,0 +1,3 @@
+Price of product Ananas has changed to 23
+Price of product Ananas has changed to 25
+Price of product Ananas has changed to 25

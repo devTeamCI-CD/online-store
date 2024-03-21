@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,12 +27,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/carts")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @Operation(summary = "Get a shopping cart",
             description = "Retrieve the user's shopping cart from DB")
-    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public ShoppingCartDto getShoppingCart() {
         return shoppingCartService.getShoppingCart();
@@ -39,7 +40,6 @@ public class ShoppingCartController {
 
     @Operation(summary = "Add new item to a cart",
             description = "Save a new item to the user's shopping cart through DB")
-    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ShoppingCartDto addToCart(@RequestBody @Valid CreateCartItemRequestDto request) {
         return shoppingCartService.addToCart(request);
@@ -47,7 +47,6 @@ public class ShoppingCartController {
 
     @Operation(summary = "Update a cart item",
             description = "Update an existing cart item in the user's shopping cart by its ID")
-    @PreAuthorize("hasRole('USER')")
     @PutMapping("/cart-items/{cartItemId}")
     public CartItemDto updateCartItem(@PathVariable Long cartItemId,
                                       @RequestBody @Valid CartItemUpdateRequestDto request) {

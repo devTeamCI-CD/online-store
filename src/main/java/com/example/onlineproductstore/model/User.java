@@ -10,7 +10,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,15 +36,11 @@ public class User implements UserDetails {
     @Email
     @Column(nullable = false, unique = true)
     private String email;
-    @NotNull
     private String password;
-    @NotNull
     @Column(name = "phone_number")
     private String phoneNumber;
-    @NotNull
     @Column(name = "first_name")
     private String firstName;
-    @NotNull
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "shipping_address")

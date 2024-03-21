@@ -16,7 +16,7 @@ services:
       - mysqldb
     restart: on-failure
     platform: linux/amd64
-    image: arsen/book-store
+    image: arsen/product_store
     build: .
     env_file: ./.env
     ports:
